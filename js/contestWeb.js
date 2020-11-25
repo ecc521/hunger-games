@@ -168,5 +168,5 @@ var runDay = function(force) {
 
   var winner = contest.getWinner();
   //if (contest.capitalData().day < 20) { setTimeout(runDay, 100); }
-  if (winner == undefined) { setTimeout(runDay, 40); }
+  if (winner == undefined) { setTimeout(runDay, 16); }
 };

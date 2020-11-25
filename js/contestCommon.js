@@ -57,7 +57,7 @@
     capital.day++;
 
     let availableBlessingOdds = 1 / (1 + (capital.day / 1000)) //Decrease odds gradually with day.
-    console.log("Blessing odds: " + availableBlessingOdds)
+    //console.log("Blessing odds: " + availableBlessingOdds)
     if (Math.random() < (0.05) * availableBlessingOdds) {
         capital.blessingThreshold = -0.1 //Guaranteed
     }
@@ -67,7 +67,7 @@
     else {
         capital.blessingThreshold = 1.1 //Impossible
     }
-    console.log("Blessing Threshold: " + capital.blessingThreshold)
+    //console.log("Blessing Threshold: " + capital.blessingThreshold)
 
     agents.forEach(function (agent) {
       agentQueue.push(agent);

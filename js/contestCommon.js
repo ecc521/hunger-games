@@ -55,7 +55,19 @@
 
   contest.startDay = function () {
     capital.day++;
-    capital.blessingThreshold = Math.random();
+
+    let availableBlessingOdds = 1 / (1 + (capital.day / 1000)) //Decrease odds gradually with day.
+    console.log("Blessing odds: " + availableBlessingOdds)
+    if (Math.random() < (0.05) * availableBlessingOdds) {
+        capital.blessingThreshold = -0.1 //Guaranteed
+    }
+    else if (Math.random() < availableBlessingOdds*0.95) {
+        capital.blessingThreshold = Math.random()
+    }
+    else {
+        capital.blessingThreshold = 1.1 //Impossible
+    }
+    console.log("Blessing Threshold: " + capital.blessingThreshold)
 
     agents.forEach(function (agent) {
       agentQueue.push(agent);
@@ -92,8 +104,8 @@
 
         // Adjust food for hunts
         let huntBurns = 6
-        let huntEarns = 6
-        let slackBurns = 2
+        let huntEarns = 5.6
+        let slackBurns = 2.2
 
         let food1 = 0, food2 = 0;
 
@@ -106,8 +118,14 @@
         food1 += (foodEarned / 2);
         food2 += (foodEarned / 2);
 
+        food1 = Math.round(food1 * 1000) / 1000
+        food2 = Math.round(food2 * 1000) / 1000
+
         a1.foodOutcome += food1
         a2.foodOutcome += food2
+
+        a1.foodOutcome = Math.round(a1.foodOutcome * 1000) / 1000
+        a2.foodOutcome = Math.round(a2.foodOutcome * 1000) / 1000
 
         a1.foodResults[a2.id] = food1
         a2.foodResults[a1.id] = food2
@@ -121,6 +139,7 @@
     // Provide food outcome string
     agents.forEach(function (agent) {
       agent.food += agent.foodOutcome;
+      agent.food = Math.round(agent.food * 1000) / 1000
 
       if (agent.foodOutcome >= 0) { agent.foodOutcomeString = "+" + agent.foodOutcome; }
       else { agent.foodOutcomeString = "" + agent.foodOutcome; }

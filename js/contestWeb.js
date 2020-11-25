@@ -121,7 +121,6 @@ var runDay = function(force) {
       var result = {
         name1: agent.name,
         name2: agent2.name,
-
       };
 
       if (agent.results[agent2.id] == 'h') {
@@ -169,5 +168,5 @@ var runDay = function(force) {
 
   var winner = contest.getWinner();
   //if (contest.capitalData().day < 20) { setTimeout(runDay, 100); }
-  if (winner == undefined) { setTimeout(runDay, 100); }
+  if (winner == undefined) { setTimeout(runDay, 40); }
 };

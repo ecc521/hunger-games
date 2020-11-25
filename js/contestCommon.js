@@ -27,6 +27,7 @@
       agent.huntsToday = 0;
 
       agent.results = {};
+      agent.foodResults = {};
 
       agent.history = {};
       agents.forEach(function (agent2) {
@@ -94,14 +95,22 @@
         let huntEarns = 6
         let slackBurns = 2
 
-        var foodEarned = 0;
-        if (a1r == 'h') { foodEarned += huntEarns; a1.foodOutcome -= huntBurns; a1.hunts++; a1.huntsToday++; totalRoundHunts++; }
-        else { a1.foodOutcome -= slackBurns; }
-        if (a2r == 'h') { foodEarned += huntEarns; a2.foodOutcome -= huntBurns; a2.hunts++; a2.huntsToday++; totalRoundHunts++; }
-        else { a2.foodOutcome -= slackBurns; }
+        let food1 = 0, food2 = 0;
 
-        a1.foodOutcome += (foodEarned / 2);
-        a2.foodOutcome += (foodEarned / 2);
+        var foodEarned = 0;
+        if (a1r == 'h') { foodEarned += huntEarns; food1 -= huntBurns; a1.hunts++; a1.huntsToday++; totalRoundHunts++; }
+        else { food1 -= slackBurns; }
+        if (a2r == 'h') { foodEarned += huntEarns; food2 -= huntBurns; a2.hunts++; a2.huntsToday++; totalRoundHunts++; }
+        else { food2 -= slackBurns; }
+
+        food1 += (foodEarned / 2);
+        food2 += (foodEarned / 2);
+
+        a1.foodOutcome += food1
+        a2.foodOutcome += food2
+
+        a1.foodResults[a2.id] = food1
+        a2.foodResults[a1.id] = food2
 
         // Save history
         a1.history[a2.id].push(a1r);

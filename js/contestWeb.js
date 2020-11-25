@@ -110,6 +110,9 @@ var runDay = function(force) {
   // Write out the results...
   var results = [];
 
+  //Food is processed after the day is finished.
+  let updateFoodAfterRound = [];
+
   contest.each(function (agent) {
     contest.each(function (agent2) {
       if (agent.id >= agent2.id) { return; }
@@ -118,43 +121,42 @@ var runDay = function(force) {
       var result = {
         name1: agent.name,
         name2: agent2.name,
-        food1: 0,
-        food2: 0
+
       };
 
       if (agent.results[agent2.id] == 'h') {
         result.result1 = '<span class="hunt">Hunt</span>';
-        result.food1 -= 6;
-        foodEarned += 6;
       } else {
         result.result1 = '<span class="slack">Slack</span>';
-        result.food1 -= 2;
       }
 
       if (agent2.results[agent.id] == 'h') {
         result.result2 = '<span class="hunt">Hunt</span>';
-        result.food2 -= 6;
-        foodEarned += 6;
       } else {
         result.result2 = '<span class="slack">Slack</span>';
-        result.food2 -= 2;
       }
 
-      result.food1 += foodEarned / 2;
-      result.food2 += foodEarned / 2;
 
-      if (result.food1 >= 0) { result.food1 = "+" + result.food1; }
-      if (result.food2 >= 0) { result.food2 = "+" + result.food2; }
+      updateFoodAfterRound.push(function() {
+          result.food1 =  agent.foodResults[agent2.id]
+          result.food2 = agent2.foodResults[agent.id]
+
+          if (result.food1 >= 0) { result.food1 = "+" + result.food1; }
+          if (result.food2 >= 0) { result.food2 = "+" + result.food2; }
+      })
 
       results.push(result);
     });
   });
 
+  contest.finishedDay();
+
+  updateFoodAfterRound.forEach((func) => {func()})
+
   s += '<div class="col-md-6">';
   s += templateHuntList({results: results});
   s += '</div>';
 
-  contest.finishedDay();
 
   s += '<div class="col-md-3">';
   s += templateFoodListBonus({agents: contest.getAgents()});

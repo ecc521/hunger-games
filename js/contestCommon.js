@@ -90,11 +90,15 @@
         a2.rounds++; totalRounds++;
 
         // Adjust food for hunts
+        let huntBurns = 6
+        let huntEarns = 6
+        let slackBurns = 2
+
         var foodEarned = 0;
-        if (a1r == 'h') { foodEarned += 6; a1.foodOutcome -= 6; a1.hunts++; a1.huntsToday++; totalRoundHunts++; }
-        else { a1.foodOutcome -= 2; }
-        if (a2r == 'h') { foodEarned += 6; a2.foodOutcome -= 6; a2.hunts++; a2.huntsToday++; totalRoundHunts++; }
-        else { a2.foodOutcome -= 2; }
+        if (a1r == 'h') { foodEarned += huntEarns; a1.foodOutcome -= huntBurns; a1.hunts++; a1.huntsToday++; totalRoundHunts++; }
+        else { a1.foodOutcome -= slackBurns; }
+        if (a2r == 'h') { foodEarned += huntEarns; a2.foodOutcome -= huntBurns; a2.hunts++; a2.huntsToday++; totalRoundHunts++; }
+        else { a2.foodOutcome -= slackBurns; }
 
         a1.foodOutcome += (foodEarned / 2);
         a2.foodOutcome += (foodEarned / 2);
@@ -115,11 +119,13 @@
 
 
     // Check capital blessingThreshold
+    let blessingReward = 2
+
     if (totalRoundHunts > capital.blessingThreshold * totalRounds) {
       contest.extraFoodWon = true;
       agents.forEach(function (agent) {
-        agent.food += agent.huntsToday * 2;
-        agent.bonusFood = agent.huntsToday * 2;
+        agent.food += agent.huntsToday * blessingReward;
+        agent.bonusFood = agent.huntsToday * blessingReward;
       });
     } else {
       contest.extraFoodWon = false;

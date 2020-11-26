@@ -63,6 +63,8 @@ var init = function() {
   templateFoodListBonus = Handlebars.compile(document.getElementById("template-foodListBonus").innerHTML);
 };
 
+let initialAgents;
+
 var runDay = function(force) {
   if (contestError) { return; }
   if (!force && !contestRunning) { return; }
@@ -78,7 +80,10 @@ var runDay = function(force) {
   s += '<div class="row">';
 
   s += '<div class="col-md-3">';
-  s += templateFoodList({agents: contest.getAgents() });
+  //Food list includes all agents.
+  s += templateFoodList({
+      agents: initialAgents = initialAgents || contest.getAgents()
+  });
   s += '</div>';
 
   // Run each agent vs. every other agent...
